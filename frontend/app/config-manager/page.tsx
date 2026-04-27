@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../../../contexts/AuthContext';
-import { useConfigContext } from '../../../contexts/ConfigContext';
-import { Navbar } from '../../../components/layout/Navbar';
-import { Sidebar } from '../../../components/layout/Sidebar';
-import { api, ApiClientError } from '../../../lib/api';
-import type { NormalizedConfig } from '../../../types';
+import { useAuth } from '../../contexts/AuthContext';
+import { useConfigContext } from '../../contexts/ConfigContext';
+import { Navbar } from '../../components/layout/Navbar';
+import { Sidebar } from '../../components/layout/Sidebar';
+import { api, ApiClientError } from '../../lib/api';
 import { Save, RefreshCw, Upload, CheckCircle, AlertTriangle, Eye } from 'lucide-react';
 import toast from 'react-hot-toast';
 import clsx from 'clsx';
@@ -69,9 +68,9 @@ export default function ConfigManagerPage() {
       }
 
       await reload();
-    } catch (err) {
+    } catch (err: unknown) {
       if (err instanceof SyntaxError) {
-        setParseError(err.message);
+        setParseError((err as SyntaxError).message);
       } else if (err instanceof ApiClientError) {
         toast.error(err.message);
       } else {
