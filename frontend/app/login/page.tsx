@@ -30,20 +30,31 @@ export default function LoginPage() {
     }
   };
 
-  /** One-click demo access — creates or logs into a shared demo account */
+  /** One-click demo access — logs into or creates a shared demo account */
   const handleDemoAccess = async () => {
     setIsDemoLoading(true);
     setError('');
+    const DEMO_EMAIL = 'demo@appgen.com';
+    const DEMO_PASS = 'demo1234!!';
+    const DEMO_NAME = 'Demo User';
     try {
-      await login('demo@appgen.com', 'demo1234!!');
+      // First try logging in (account may already exist)
+      await login(DEMO_EMAIL, DEMO_PASS);
       router.push('/');
-    } catch {
-      // Account doesn't exist yet — create it
+    } catch (loginErr) {
+      // Only attempt registration if it's an auth failure (wrong creds / user not found)
+      const msg = loginErr instanceof ApiClientError ? loginErr.message.toLowerCase() : '';
+      const shouldRegister = msg.includes('invalid') || msg.includes('not found') || msg.includes('credentials');
+      if (!shouldRegister) {
+        setError(loginErr instanceof ApiClientError ? loginErr.message : 'Demo access failed');
+        setIsDemoLoading(false);
+        return;
+      }
       try {
-        await register('demo@appgen.com', 'demo1234!!', 'Demo User');
+        await register(DEMO_EMAIL, DEMO_PASS, DEMO_NAME);
         router.push('/');
-      } catch (err) {
-        setError(err instanceof ApiClientError ? err.message : 'Demo access failed');
+      } catch (regErr) {
+        setError(regErr instanceof ApiClientError ? regErr.message : 'Demo setup failed');
       }
     } finally {
       setIsDemoLoading(false);
