@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Users ───────────────────────────────────────────────────────────────────
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  passwordHash String      @map("password_hash")
+  name         String?
+  createdAt    DateTime    @default(now()) @map("created_at")
+  updatedAt    DateTime    @updatedAt @map("updated_at")
+
+  records      Record[]
+  csvImports   CsvImport[]
+
+  @@map("users")
+}
+
+// ─── Records (flexible JSONB store) ──────────────────────────────────────────
+// Instead of creating a table per entity (which would require migrations on
+// every config change), we store all entity data in a single table.
+// The `data` column is JSONB, allowing any shape without schema changes.
+
+model Record {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  entityName String   @map("entity_name")
+  data       Json
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, entityName])
+  @@map("records")
+}
+
+// ─── CSV Imports ──────────────────────────────────────────────────────────────
+
+model CsvImport {
+  id         String   @id @default(cuid())
+  userId     String   @map("user_id")
+  entityName String   @map("entity_name")
+  filename   String
+  rowCount   Int      @default(0) @map("row_count")
+  // Status: pending | mapped | processing | complete | failed
+  status     String   @default("pending")
+  // The user-defined column mapping { csvHeader: entityField }
+  mapping    Json?
+  // Raw parsed rows stored temporarily until confirmed
+  rawData    Json?    @map("raw_data")
+  errors     Json?    // Array of { row, reason } objects
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("csv_imports")
+}

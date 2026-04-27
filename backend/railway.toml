@@ -1,0 +1,25 @@
+[build]
+builder = "NIXPACKS"
+
+[build.env]
+NODE_ENV = "production"
+
+[deploy]
+startCommand = "npx prisma migrate deploy && node dist/src/index.js"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 100
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 3
+
+[[services]]
+protocol = "TCP"
+internal_port = 4000
+
+[[services.ports]]
+port = 443
+handlers = ["https"]
+
+[[services.ports]]
+port = 80
+handlers = ["http"]
+force_https = true

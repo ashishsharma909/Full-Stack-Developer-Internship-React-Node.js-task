@@ -1,0 +1,192 @@
+{
+  "app": {
+    "name": "CRM System",
+    "language": "en",
+    "description": "A config-driven customer relationship management app",
+    "theme": "dark",
+    "version": "1.0.0"
+  },
+  "entities": [
+    {
+      "name": "contacts",
+      "label": "Contacts",
+      "description": "Customer contact records",
+      "fields": [
+        { "name": "name",     "type": "string", "label": "Full Name",     "required": true,  "placeholder": "Jane Doe" },
+        { "name": "email",    "type": "email",  "label": "Email Address", "required": true,  "placeholder": "jane@example.com" },
+        { "name": "phone",    "type": "string", "label": "Phone",         "required": false, "placeholder": "+1 555 000 0000" },
+        { "name": "company",  "type": "string", "label": "Company",       "required": false },
+        {
+          "name": "status",
+          "type": "enum",
+          "label": "Status",
+          "required": true,
+          "options": ["lead", "active", "inactive", "churned"],
+          "defaultValue": "lead"
+        },
+        { "name": "notes",    "type": "text",   "label": "Notes",         "required": false }
+      ]
+    },
+    {
+      "name": "projects",
+      "label": "Projects",
+      "description": "Internal project tracking",
+      "fields": [
+        { "name": "title",       "type": "string", "label": "Project Title", "required": true },
+        { "name": "description", "type": "text",   "label": "Description",   "required": false },
+        { "name": "owner",       "type": "string", "label": "Owner",         "required": true },
+        { "name": "deadline",    "type": "date",   "label": "Deadline",      "required": false },
+        {
+          "name": "priority",
+          "type": "enum",
+          "label": "Priority",
+          "options": ["low", "medium", "high", "critical"],
+          "defaultValue": "medium"
+        },
+        {
+          "name": "status",
+          "type": "enum",
+          "label": "Status",
+          "options": ["planning", "active", "paused", "completed"],
+          "defaultValue": "planning"
+        }
+      ]
+    },
+    {
+      "name": "tasks",
+      "label": "Tasks",
+      "fields": [
+        { "name": "title",       "type": "string", "label": "Task",          "required": true },
+        { "name": "assignee",    "type": "string", "label": "Assignee",      "required": false },
+        { "name": "dueDate",     "type": "date",   "label": "Due Date",      "required": false },
+        { "name": "completed",   "type": "boolean","label": "Completed",     "required": false, "defaultValue": false },
+        {
+          "name": "priority",
+          "type": "enum",
+          "label": "Priority",
+          "options": ["low", "medium", "high"],
+          "defaultValue": "medium"
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "entity": "contacts",
+      "type": "table",
+      "label": "All Contacts",
+      "columns": ["name", "email", "company", "status"]
+    },
+    {
+      "entity": "contacts",
+      "type": "form",
+      "label": "New Contact",
+      "fields": ["name", "email", "phone", "company", "status", "notes"]
+    },
+    {
+      "entity": "projects",
+      "type": "table",
+      "label": "Projects",
+      "columns": ["title", "owner", "priority", "status", "deadline"]
+    },
+    {
+      "entity": "projects",
+      "type": "form",
+      "label": "New Project",
+      "fields": ["title", "description", "owner", "deadline", "priority", "status"]
+    },
+    {
+      "entity": "tasks",
+      "type": "table",
+      "label": "Tasks",
+      "columns": ["title", "assignee", "priority", "dueDate", "completed"]
+    },
+    {
+      "entity": "tasks",
+      "type": "form",
+      "label": "New Task",
+      "fields": ["title", "assignee", "dueDate", "priority", "completed"]
+    }
+  ],
+  "labels": {
+    "en": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "edit": "Edit",
+      "create": "Create New",
+      "import": "Import CSV",
+      "export": "Export",
+      "search": "Search...",
+      "loading": "Loading...",
+      "noData": "No records found.",
+      "confirmDelete": "Are you sure you want to delete this record?",
+      "success": "Success",
+      "error": "Error",
+      "required": "This field is required",
+      "actions": "Actions",
+      "welcome": "Welcome back",
+      "signIn": "Sign In",
+      "signUp": "Sign Up",
+      "signOut": "Sign Out",
+      "email": "Email",
+      "password": "Password",
+      "name": "Name"
+    },
+    "fr": {
+      "save": "Enregistrer",
+      "cancel": "Annuler",
+      "delete": "Supprimer",
+      "edit": "Modifier",
+      "create": "Créer",
+      "import": "Importer CSV",
+      "export": "Exporter",
+      "search": "Rechercher...",
+      "loading": "Chargement...",
+      "noData": "Aucun enregistrement trouvé.",
+      "confirmDelete": "Voulez-vous vraiment supprimer cet enregistrement?",
+      "success": "Succès",
+      "error": "Erreur",
+      "required": "Ce champ est obligatoire",
+      "actions": "Actions",
+      "welcome": "Bon retour",
+      "signIn": "Se connecter",
+      "signUp": "S'inscrire",
+      "signOut": "Se déconnecter",
+      "email": "Email",
+      "password": "Mot de passe",
+      "name": "Nom"
+    },
+    "es": {
+      "save": "Guardar",
+      "cancel": "Cancelar",
+      "delete": "Eliminar",
+      "edit": "Editar",
+      "create": "Crear nuevo",
+      "import": "Importar CSV",
+      "export": "Exportar",
+      "search": "Buscar...",
+      "loading": "Cargando...",
+      "noData": "No se encontraron registros.",
+      "confirmDelete": "¿Está seguro de que desea eliminar este registro?",
+      "success": "Éxito",
+      "error": "Error",
+      "required": "Este campo es obligatorio",
+      "actions": "Acciones",
+      "welcome": "Bienvenido de nuevo",
+      "signIn": "Iniciar sesión",
+      "signUp": "Registrarse",
+      "signOut": "Cerrar sesión",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "name": "Nombre"
+    }
+  },
+  "events": [
+    { "trigger": "record.created", "action": "toast",  "message": "Record created successfully" },
+    { "trigger": "record.updated", "action": "toast",  "message": "Record updated successfully" },
+    { "trigger": "record.deleted", "action": "toast",  "message": "Record deleted" },
+    { "trigger": "csv.imported",   "action": "toast",  "message": "CSV import complete" },
+    { "trigger": "record.created", "action": "email",  "template": "new_record", "message": "A new record was created in {{entity}}" }
+  ]
+}
